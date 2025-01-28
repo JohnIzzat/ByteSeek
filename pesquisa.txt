@@ -1,0 +1,8 @@
+pesquisa no google
+
+site:instagram.com "roupas" ("@gmail.com" OR "@hotmail.com")("(11)" OR "+55")
+
+
+
+tenho essa pesquisa, pegue todos os dados como nome, email e telefone.
+Faça percorrer por todas as paginas pegando todos os resultados com python e gerando uma planilha.
