@@ -3,6 +3,10 @@ pesquisa no google
 site:instagram.com "roupas" ("@gmail.com" OR "@hotmail.com")("(11)" OR "+55")
 
 
+site:instagram.com: Limita os resultados ao Instagram.
 
-tenho essa pesquisa, pegue todos os dados como nome, email e telefone.
-Faça percorrer por todas as paginas pegando todos os resultados com python e gerando uma planilha.
+"roupas": Procura a palavra "roupas" no conteúdo.
+
+("@gmail.com" OR "@hotmail.com"): Busca endereços de e-mail Gmail ou Hotmail.
+
+("(11)" OR "+55"): Filtra perfis com números de telefone que incluem o código DDD de São Paulo (11) ou o código de país (+55, Brasil).
