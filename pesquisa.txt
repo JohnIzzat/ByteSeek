@@ -1,6 +1,8 @@
 pesquisa no google
 
 site:instagram.com "roupas" ("@gmail.com" OR "@hotmail.com")("(11)" OR "+55")
+site:instagram.com "petshop" ("@gmail.com" OR "@hotmail.com")("(11)" OR "+55")
+
 
 
 site:instagram.com: Limita os resultados ao Instagram.

@@ -1,0 +1,12 @@
+site:instagram.com "ração" OR "banho e tosa" OR "hotel pet" ("@gmail.com" OR "@hotmail.com")("(11)" OR "+55")
+site:instagram.com "#petshop" ("@gmail.com" OR "@hotmail.com")("(11)" OR "+55")
+site:instagram.com "petshop Rio de Janeiro" ("@gmail.com" OR "@hotmail.com")("(21)" OR "+55")
+site:instagram.com "produtos sustentáveis para pets" OR "ecológico pet" ("@gmail.com" OR "@hotmail.com")("(11)" OR "+55")
+site:instagram.com "roupas para pets" OR "joias para pets" OR "spa pet" ("@gmail.com" OR "@hotmail.com")("(11)" OR "+55")
+site:instagram.com "dicas para pets" OR "cuidados com pets" OR "blog pet" ("@gmail.com" OR "@hotmail.com")("(11)" OR "+55")
+site:instagram.com "adoção de pets" OR "ONG de animais" OR "resgate animal" ("@gmail.com" OR "@hotmail.com")("(11)" OR "+55")
+site:instagram.com "fisioterapia para pets" OR "hidroterapia animal" ("@gmail.com" OR "@hotmail.com")("(11)" OR "+55")
+site:instagram.com "hotel para pets" OR "transporte de pets" OR "viagem com pets" ("@gmail.com" OR "@hotmail.com")("(11)" OR "+55")site:instagram.com "daycare para pets" OR "creche pet" OR "adestramento" ("@gmail.com" OR "@hotmail.com")("(11)" OR "+55")
+site:instagram.com "acessórios para pets" OR "coleiras" OR "brinquedos pet" ("@gmail.com" OR "@hotmail.com")("(11)" OR "+55")
+
+
