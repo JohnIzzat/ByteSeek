@@ -1,0 +1,7 @@
+site:*.blogspot.com "petshop" ("@gmail.com" OR "@hotmail.com")("(11)" OR "+55")
+site:linkedin.com "petshop" ("@gmail.com" OR "@hotmail.com")("(11)" OR "+55")
+site:youtube.com "petshop" ("@gmail.com" OR "@hotmail.com")("(11)" OR "+55")
+site:twitter.com "petshop" ("@gmail.com" OR "@hotmail.com")("(11)" OR "+55")
+site:olx.com.br "petshop" ("@gmail.com" OR "@hotmail.com")("(11)" OR "+55")
+site:*.com.br "petshop" ("@gmail.com" OR "@hotmail.com")("(11)" OR "+55")
+site:facebook.com "petshop" ("@gmail.com" OR "@hotmail.com")("(11)" OR "+55")

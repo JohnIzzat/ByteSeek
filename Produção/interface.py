@@ -15,6 +15,13 @@ def main(page: ft.Page):
     # Impede do usuario redimensione a Janela
     page.window_resizable = False
 
+    # Criando a caixa de diálogo (modal)
+    progresso_dialog = ft.AlertDialog(
+        modal=True, # Impede que o usuário feche a janela manualmente
+        title=ft.Text("Coletando Dados"),
+        content=ft.Text("Aguarde enquanto os dados estão sendo coletados..."),
+    )
+
     # Função e botão para alterar o tema
     def alterar_tema(e):
         page.theme_mode = "dark" if page.theme_mode == "light" else "light"
@@ -111,9 +118,18 @@ def main(page: ft.Page):
             f"({email_query}) (\"({selected_phone})\" OR \"+55\")"
         )
 
+        # Abre a caixa de diálogo informando que a busca está em andamento
+        page.dialog = progresso_dialog
+        progresso_dialog.open = True
+        page.update()
+
         # Chama a função do back-end para buscar os dados
         results = executar_busca(
             selected_social_media, selected_niche, email_query, selected_phone)
+        
+        # Fecha a caixa de diálogo quando a coleta terminar
+        progresso_dialog.open = False
+        page.update
 
         if results:
             page.snack_bar = ft.SnackBar(
