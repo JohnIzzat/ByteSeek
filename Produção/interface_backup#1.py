@@ -8,30 +8,19 @@ def main(page: ft.Page):
     page.horizontal_alignment = "center"
     page.vertical_alignment = "center"
 
-    cancelar_coleta = False # variavel de Controle para Cancelamento
-    def cancelar_busca(e):
-        nonlocal cancelar_coleta
-        cancelar_coleta = True # Define a variavel para interromper a busca
-        progresso_dialog.open = False
-        page.update()    
-
     # Define o tamanho da Janela
     page.window.width= 400
     page.window.height = 600
 
     # Impede do usuario redimensione a Janela
-    page.window.resizable = False
+    page.window_resizable = False
 
     # Criando a caixa de diálogo (modal)
     progresso_dialog = ft.AlertDialog(
         modal=True, # Impede que o usuário feche a janela manualmente
         title=ft.Text("Coletando Dados"),
         content=ft.Text("Aguarde enquanto os dados estão sendo coletados..."),
-        actions=[
-            ft.TextButton("Cancelar", on_click=cancelar_busca) # Cancelar a operação
-        ],
     )
-
 
     # Função e botão para alterar o tema
     def alterar_tema(e):
@@ -108,10 +97,6 @@ def main(page: ft.Page):
 
     # Botão de Confirmar
     def on_confirm_click(e):
-        nonlocal cancelar_coleta
-        cancelar_coleta = False # Reinicia a variavel ao iniciar uma nova busca
-
-
         selected_social_media = social_media_dropdown.value
         selected_niche = niche_dropdown.value
         selected_emails = [
@@ -144,7 +129,7 @@ def main(page: ft.Page):
         
         # Fecha a caixa de diálogo quando a coleta terminar
         progresso_dialog.open = False
-        page.update()
+        page.update
 
         if results:
             page.snack_bar = ft.SnackBar(

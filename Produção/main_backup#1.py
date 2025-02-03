@@ -3,7 +3,6 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.chrome.options import Options
 from selenium.common.exceptions import TimeoutException, NoSuchElementException
 import time
 import random
@@ -25,13 +24,7 @@ def executar_busca(rede_social, nicho, email, telefone):
 
 def search_and_scrape(query, max_pages=5):
     # Configuração do WebDriver
-    chrome_options = Options()
-    chrome_options.add_argument('--headless')
-
-# Alternativa: para iniciar minimizado ao invés de headless
-# chrome_options.add_argument('--start-minimized')
-
-    driver = webdriver.Chrome(options=chrome_options)  # Substitua por outro driver se necessário
+    driver = webdriver.Chrome()  # Substitua por outro driver se necessário
     driver.get("https://duckduckgo.com/")  # Acessa o DuckDuckGo
     results = []
 
