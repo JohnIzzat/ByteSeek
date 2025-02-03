@@ -26,10 +26,13 @@ def executar_busca(rede_social, nicho, email, telefone):
 def search_and_scrape(query, max_pages=5):
     # Configuração do WebDriver
     chrome_options = Options()
-    chrome_options.add_argument('--headless')
+    chrome_options.add_argument('--headless')  # Modo headless (invisível
+    # Alternativa: para iniciar minimizado ao invés de headless
+    # chrome_options.add_argument('--start-minimized')
+    chrome_options.add_argument('--disable-dev-shm-usage') # Melhora estabilidade
 
-# Alternativa: para iniciar minimizado ao invés de headless
-# chrome_options.add_argument('--start-minimized')
+    #chrome_options.add_argument('--disable-gpu')  # Desativa aceleração GPU
+    #chrome_options.add_argument('--no-sandbox')  # Útil para ambientes Linux
 
     driver = webdriver.Chrome(options=chrome_options)  # Substitua por outro driver se necessário
     driver.get("https://duckduckgo.com/")  # Acessa o DuckDuckGo
