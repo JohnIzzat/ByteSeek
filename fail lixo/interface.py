@@ -1,47 +1,70 @@
 import flet as ft
+import sys
+import os
 from main import executar_busca
 
-    # Todas as configurações da Interface
+# Todas as configurações da Interface
+
 def main(page: ft.Page):
     page.title = "Busca e Seleção de Parâmetros"
     page.theme_mode = "black"
     page.horizontal_alignment = "center"
     page.vertical_alignment = "center"
 
+    # Variáveis de controle globais
+    cancelar_coleta = False
+    driver_atual = None  # Vai armazenar a referência do driver
+
     # Define o tamanho da Janela
-    page.window.width= 400
+    page.window.width = 400
     page.window.height = 600
 
-    # Impede do usuario redimensione a Janela
-    page.window_resizable = False
+    # Impede do usuario redimensionar a Janela
+    page.window.resizable = False
+
+    def close_dialog(e):
+        nonlocal cancelar_coleta
+        cancelar_coleta = True
+        page.overlay.clear()  # Use this instead of page.dialog = None
+        progresso_dialog.open = False
+        page.update()  # Fixed the typo from 'upodate' to 'update'
 
     # Criando a caixa de diálogo (modal)
     progresso_dialog = ft.AlertDialog(
-        modal=True, # Impede que o usuário feche a janela manualmente
+        modal=True,
         title=ft.Text("Coletando Dados"),
         content=ft.Text("Aguarde enquanto os dados estão sendo coletados..."),
+        actions=[
+            ft.TextButton("Cancelar", on_click=lambda e: close_dialog(e))  # Vamos adicionar a ação depois
+        ],
     )
+
+
+    # Função para cancelar a busca e fechar o navegador e o aplicativo
+    def cancelar_busca(e):
+        # Fecha o modal
+        nonlocal cancelar_coleta
+        cancelar_coleta = True
+        progresso_dialog.open = False
+        page.dialog = None
+        page.overlay.clear()
+        page.update()
+        
+    # Agora associamos a função ao botão "Cancelar"
+    #progresso_dialog.actions[0].on_click = cancelar_busca
 
     # Função e botão para alterar o tema
     def alterar_tema(e):
         page.theme_mode = "dark" if page.theme_mode == "light" else "light"
         page.update()
 
-    botao_tema = ft.ElevatedButton("Mudar Tema", on_click=alterar_tema,
-                                   width=100,
-                                   height=40
-                                   )
-    page.floating_action_button = botao_tema   
-
-    # # Título
-    # title = ft.Text(
-    #     "Parâmetros de Busca",
-    #     size=20,
-    #     weight="bold",
-    #     color="blue600",
-    #     text_align=ft.TextAlign.CENTER,
-        
-    # )
+    botao_tema = ft.ElevatedButton(
+        "Mudar Tema",
+        on_click=alterar_tema,
+        width=100,
+        height=40
+    )
+    page.floating_action_button = botao_tema
 
     # Opções de Rede Social
     social_media_label = ft.Text("Rede Social:")
@@ -74,17 +97,7 @@ def main(page: ft.Page):
 
     # Lista de DDDs do Brasil
     ddds_brasil = [
-        "11", "12", "13", "14", "15", "16", "17", "18", "19",
-        "21", "22", "24", "27", "28",
-        "31", "32", "33", "34", "35", "37", "38",
-        "41", "42", "43", "44", "45", "46",
-        "47", "48", "49",
-        "51", "53", "54", "55",
-        "61", "62", "64", "65", "66", "67", "68", "69",
-        "71", "73", "74", "75", "77",
-        "79",
-        "81", "82", "83", "84", "85", "86", "87", "88", "89",
-        "91", "92", "93", "94", "95", "96", "97", "98", "99"
+        "11", "21"
     ]
 
     # Opções de Telefone
@@ -97,10 +110,14 @@ def main(page: ft.Page):
 
     # Botão de Confirmar
     def on_confirm_click(e):
+        nonlocal cancelar_coleta, driver_atual
+        cancelar_coleta = False
+        
         selected_social_media = social_media_dropdown.value
         selected_niche = niche_dropdown.value
         selected_emails = [
-            checkbox.label for checkbox in email_checkboxes.controls if checkbox.value]
+            checkbox.label for checkbox in email_checkboxes.controls if checkbox.value
+        ]
         selected_phone = phone_dropdown.value
 
         if not selected_social_media or not selected_niche or not selected_emails or not selected_phone:
@@ -113,23 +130,21 @@ def main(page: ft.Page):
         email_query = " OR ".join(
             [f"@{email.lower()}.com" for email in selected_emails])
 
-        query = (
-            f"site:{selected_social_media.lower()}.com \"{selected_niche}\" "
-            f"({email_query}) (\"({selected_phone})\" OR \"+55\")"
-        )
-
         # Abre a caixa de diálogo informando que a busca está em andamento
-        page.dialog = progresso_dialog
+        page.overlay.append(progresso_dialog)
         progresso_dialog.open = True
         page.update()
 
         # Chama a função do back-end para buscar os dados
-        results = executar_busca(
-            selected_social_media, selected_niche, email_query, selected_phone)
-        
+        results, driver = executar_busca(
+            selected_social_media, selected_niche, email_query, selected_phone
+        )
+
+        driver_atual = driver  # Armazena o driver para poder cancelar depois
+
         # Fecha a caixa de diálogo quando a coleta terminar
         progresso_dialog.open = False
-        page.update
+        page.update()
 
         if results:
             page.snack_bar = ft.SnackBar(
@@ -148,14 +163,21 @@ def main(page: ft.Page):
 
     # Layout
     page.add(
-        ft.Column([
-            #title,
-            social_media_label, social_media_dropdown,
-            niche_label, niche_dropdown,
-            email_label, email_checkboxes,
-            phone_label, phone_dropdown,
-            confirm_button,
-        ], spacing=15, alignment="center")
+        ft.Column(
+            [
+                social_media_label,
+                social_media_dropdown,
+                niche_label,
+                niche_dropdown,
+                email_label,
+                email_checkboxes,
+                phone_label,
+                phone_dropdown,
+                confirm_button,
+            ],
+            spacing=15,
+            alignment="center"
+        )
     )
 
 

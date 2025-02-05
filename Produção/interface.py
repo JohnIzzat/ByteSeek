@@ -8,30 +8,19 @@ def main(page: ft.Page):
     page.horizontal_alignment = "center"
     page.vertical_alignment = "center"
 
-    cancelar_coleta = False # variavel de Controle para Cancelamento
-    def cancelar_busca(e):
-        nonlocal cancelar_coleta
-        cancelar_coleta = True # Define a variavel para interromper a busca
-        progresso_dialog.open = False
-        page.update()    
-
     # Define o tamanho da Janela
     page.window.width= 400
     page.window.height = 600
 
     # Impede do usuario redimensione a Janela
-    page.window.resizable = False
+    page.window_resizable = False
 
     # Criando a caixa de diálogo (modal)
     progresso_dialog = ft.AlertDialog(
         modal=True, # Impede que o usuário feche a janela manualmente
         title=ft.Text("Coletando Dados"),
         content=ft.Text("Aguarde enquanto os dados estão sendo coletados..."),
-        actions=[
-            ft.TextButton("Cancelar", on_click=cancelar_busca) # Cancelar a operação
-        ],
     )
-
 
     # Função e botão para alterar o tema
     def alterar_tema(e):
@@ -85,17 +74,7 @@ def main(page: ft.Page):
 
     # Lista de DDDs do Brasil
     ddds_brasil = [
-        "11", "12", "13", "14", "15", "16", "17", "18", "19",
-        "21", "22", "24", "27", "28",
-        "31", "32", "33", "34", "35", "37", "38",
-        "41", "42", "43", "44", "45", "46",
-        "47", "48", "49",
-        "51", "53", "54", "55",
-        "61", "62", "64", "65", "66", "67", "68", "69",
-        "71", "73", "74", "75", "77",
-        "79",
-        "81", "82", "83", "84", "85", "86", "87", "88", "89",
-        "91", "92", "93", "94", "95", "96", "97", "98", "99"
+        "11", "12"
     ]
 
     # Opções de Telefone
@@ -108,10 +87,6 @@ def main(page: ft.Page):
 
     # Botão de Confirmar
     def on_confirm_click(e):
-        nonlocal cancelar_coleta
-        cancelar_coleta = False # Reinicia a variavel ao iniciar uma nova busca
-
-
         selected_social_media = social_media_dropdown.value
         selected_niche = niche_dropdown.value
         selected_emails = [
@@ -144,7 +119,7 @@ def main(page: ft.Page):
         
         # Fecha a caixa de diálogo quando a coleta terminar
         progresso_dialog.open = False
-        page.update()
+        page.update
 
         if results:
             page.snack_bar = ft.SnackBar(
