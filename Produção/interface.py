@@ -74,7 +74,7 @@ def main(page: ft.Page):
 
     # Lista de DDDs do Brasil
     ddds_brasil = [
-        "11", "12"
+        "11", "21"
     ]
 
     # Opções de Telefone
@@ -93,10 +93,16 @@ def main(page: ft.Page):
             checkbox.label for checkbox in email_checkboxes.controls if checkbox.value]
         selected_phone = phone_dropdown.value
 
+        # if not selected_social_media or not selected_niche or not selected_emails or not selected_phone:
+        #     page.snack_bar = ft.SnackBar(
+        #         ft.Text("Por favor, preencha todos os campos."))
+        #     page.snack_bar.open()
+        #     return
+        
         if not selected_social_media or not selected_niche or not selected_emails or not selected_phone:
-            page.snack_bar = ft.SnackBar(
-                ft.Text("Por favor, preencha todos os campos."))
-            page.snack_bar.open()
+            snack_bar = ft.SnackBar(content=ft.Text("Por favor, preencha todos os campos."))
+            page.overlay.append(snack_bar)
+            snack_bar.open()
             return
 
         # Monta a query para o back-end
@@ -109,8 +115,8 @@ def main(page: ft.Page):
         )
 
         # Abre a caixa de diálogo informando que a busca está em andamento
-        page.dialog = progresso_dialog
         progresso_dialog.open = True
+        page.dialog = progresso_dialog
         page.update()
 
         # Chama a função do back-end para buscar os dados
@@ -119,15 +125,22 @@ def main(page: ft.Page):
         
         # Fecha a caixa de diálogo quando a coleta terminar
         progresso_dialog.open = False
-        page.update
+        page.update()
+
+        # if results:
+        #     page.snack_bar = ft.SnackBar(
+        #         ft.Text("Resultados salvos no arquivo 'resultados.csv'."))
+        # else:
+        #     page.snack_bar = ft.SnackBar(
+        #         ft.Text("Nenhum resultado encontrado."))
+        # page.snack_bar.open()
 
         if results:
-            page.snack_bar = ft.SnackBar(
-                ft.Text("Resultados salvos no arquivo 'resultados.csv'."))
+            snack_bar = ft.SnackBar(content=ft.Text("Resultados salvos no arquivo 'resultados.csv'."))
         else:
-            page.snack_bar = ft.SnackBar(
-                ft.Text("Nenhum resultado encontrado."))
-        page.snack_bar.open()
+            snack_bar = ft.SnackBar(content=ft.Text("Nenhum resultado encontrado."))
+            page.overlay.append(snack_bar)
+            snack_bar.open()
 
     confirm_button = ft.ElevatedButton(
         "Confirmar",
