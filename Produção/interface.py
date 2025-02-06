@@ -60,6 +60,7 @@ def main(page: ft.Page):
         options=[
             ft.dropdown.Option("roupas"),
             ft.dropdown.Option("pets"),
+            ft.dropdown.Option("infantil"),
         ],
         hint_text="Selecione",
         width=200,
