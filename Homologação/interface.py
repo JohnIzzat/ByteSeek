@@ -5,7 +5,7 @@ from main import executar_busca
 niche_queries = {
     "pets": '"pets"',
     "roupas": '"moda" OR "roupas" OR "vestuário"',
-    "infantil": '"infantil" OR "bebê" OR "kids"',
+    "infantil": '"infantil" OR "criança" OR "kids"',
     "autopeças": '"auto peça" OR "autopeça" OR "auto peças"',
 }
 
