@@ -3,8 +3,8 @@ from main import executar_busca
 
 # Dicionário de nichos com pesquisas personalizadas
 niche_queries = {
-    "pets": '"pets"',
-    "roupas": '"moda" OR "roupas" OR "vestuário"',
+    "pets": '"pets" OR "pet" OR "animais" OR "cachorro" OR "gato"',
+    "roupas": '"roupas" OR "moda" OR "multimarcas" OR "adultos" OR "infantil"',
     "infantil": '"infantil" OR "criança" OR "kids"',
     "autopeças": '"auto peça" OR "autopeça" OR "auto peças"',
 }
@@ -77,6 +77,7 @@ def main(page: ft.Page):
         options=[
             ft.dropdown.Option("Google"),
             ft.dropdown.Option("DuckDuckGo"),
+            ft.dropdown.Option("Bing"),
         ],
         hint_text="Defina um buscador",
         width=202,
