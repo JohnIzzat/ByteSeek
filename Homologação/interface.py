@@ -19,12 +19,13 @@ def show_snackbar(page, message):
 
 
 def main(page: ft.Page):
+    # Configurações da Janela
     page.title = "SeekBot"
     page.theme_mode = "dark"
     page.horizontal_alignment = "center"
-    page.vertical_alignment = "center"
-    page.window.width = 411
-    page.window.height = 750
+    page.vertical_alignment = "Center"
+    page.window.width = 450  # Largura da Janela
+    page.window.height = 640  # Altura da Janela
 
     progresso_dialog = ft.AlertDialog(
         modal=True,
@@ -79,8 +80,8 @@ def main(page: ft.Page):
             ft.dropdown.Option("DuckDuckGo"),
             ft.dropdown.Option("Bing"),
         ],
-        hint_text="Defina um buscador",
-        width=202,
+        hint_text="Buscadores",
+        width=190, # Largura da Caixa
     )
 
     # Campo para definir o máximo de páginas a serem pesquisadas
@@ -144,24 +145,68 @@ def main(page: ft.Page):
         show_snackbar(
             page, "Resultados salvos no arquivo 'resultados.csv'." if results else "Nenhum resultado encontrado.")
 
+        # Configuração do botão de iniciar
     confirm_button = ft.ElevatedButton(
-        "Confirmar",
+        "INICIAR",
         on_click=on_confirm_click,
         color="white",
         bgcolor="green600",
+        width=120,
+        height=40,
+        elevation=0,
+        style=ft.ButtonStyle(
+            text_style=ft.TextStyle(font_family="Arial", size=16)
+        )
     )
 
     page.add(
+        # Elemento de linha para agrupar os campos de Rede Social
+        ft.Container(
+            ft.Column([
+                ft.Row([
+                    ft.Column([ft.Text("Rede Social"), social_media_dropdown]),
+                ])
+            ], alignment="Center", spacing=20)),
+
+        # Elemento de linha para agrupar os campos de Nicho
+        ft.Container(height=10),
+            ft.Column([
+                ft.Row([
+                    ft.Column([ft.Text("Nicho"), niche_dropdown]),
+                ])
+            ], alignment="Center", spacing=20),
+
+        # Elemento de linha para agrupar os campos de e-mail
+            ft.Container(height=10),
+                ft.Column([
+                    ft.Column([ft.Text("E-mail"), email_checkboxes]),
+                ], alignment="Center", spacing=20),
+
+        # Elemento de linha para agrupar os campos de DDD'S
+        ft.Container(height=10),
+            ft.Column([
+                ft.Row([
+                    ft.Column([ft.Text("1º Região"), phone_dropdown]),
+                    ft.Column([ft.Text("2º Região"), phone_dropdown2]),
+                ])
+            ], alignment="Center", spacing=20),
+
+        # Elemento de linha para agrupar os campos de Motor de Busca e Máximo de Páginas
+        ft.Container(height=10),
         ft.Column([
-            ft.Text("Rede Social:"), social_media_dropdown,
-            ft.Text("Nicho:"), niche_dropdown,
-            ft.Text("E-mail:"), email_checkboxes,
-            ft.Text("Telefone (1º DDD):"), phone_dropdown,
-            ft.Text("Telefone (2º DDD):"), phone_dropdown2,
-            ft.Text("Motor de Busca:"), search_engine_dropdown,
-            max_pages_field,
-            confirm_button,
-        ], spacing=15, alignment="center")
+            ft.Row([
+                ft.Column([ft.Text("Defina um Buscador"), search_engine_dropdown]),
+                ft.Column([ft.Text(""), max_pages_field]),
+            ])
+        ], alignment="Center", spacing=20),
+
+        # Elemento de linha para agrupar os campos de Confirmar
+        ft.Container(height=0),
+            ft.Column([
+                ft.Row([
+                    ft.Column([ft.Text(""), confirm_button]),
+                ])
+            ], alignment="Center", spacing=20),
     )
 
 

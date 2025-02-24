@@ -13,36 +13,20 @@ from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
 
-# Configuração do logging
-logging.basicConfig(
-    filename="app.log",             # Nome do arquivo onde os logs serão salvos
-    # Define o nível dos logs (DEBUG registra tudo)
-    level=logging.DEBUG,
-    format="%(asctime)s - %(levelname)s - %(message)s",  # Formato do log
-    datefmt="%Y-%m-%d %H:%M:%S",     # Formato da data
-)
-
 
 def accept_cookies(driver):
-    """
-    Tenta localizar e clicar no botão de aceite de cookies com o texto "Aceitar".
-    Aguarda 7 segundos antes de clicar.
-    """
     try:
         cookie_button = WebDriverWait(driver, 10).until(
             EC.element_to_be_clickable((By.LINK_TEXT, "Aceitar"))
         )
-        time.sleep(7)  # Aguarda 7 segundos antes de clicar
+        time.sleep(7)
         cookie_button.click()
-        time.sleep(2)  # Aguarda um instante após clicar
+        time.sleep(2)
     except Exception as e:
         logging.debug("Erro ao aceitar cookies: " + str(e))
 
 
 def get_driver(headless: bool = False) -> webdriver.Chrome:
-    """
-    Configura e retorna um driver do Chrome com as opções especificadas.
-    """
     chrome_options = Options()
     if headless:
         chrome_options.add_argument("--headless")
@@ -50,7 +34,6 @@ def get_driver(headless: bool = False) -> webdriver.Chrome:
     chrome_options.add_argument(
         "--disable-blink-features=AutomationControlled")
     chrome_options.add_argument("--disable-dev-shm-usage")
-    # Ignora erros de certificado
     chrome_options.add_argument("--ignore-certificate-errors")
     chrome_options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
                                 "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36")
@@ -64,9 +47,6 @@ def get_driver(headless: bool = False) -> webdriver.Chrome:
 
 def executar_busca(rede_social: str, nicho: str, email: str, telefone: str, telefone2: str,
                    max_pages: int, search_engine: str = "google") -> list:
-    """
-    Executa a busca e o scraping utilizando os parâmetros informados e salva os resultados em CSV.
-    """
     query = (
         f"site:{rede_social.lower()}.com {nicho} "
         f"({email}) (\"({telefone})\" OR \"({telefone2})\" OR \"+55\")"
@@ -83,17 +63,13 @@ def executar_busca(rede_social: str, nicho: str, email: str, telefone: str, tele
 
 def search_and_scrape(query: str, rede_social: str, max_pages: int = 5,
                       search_engine: str = "google") -> list:
-    """
-    Realiza o scraping dos resultados da busca, navegando pelas páginas e extraindo os dados.
-    """
     logging.info(f"Iniciando scraping no {search_engine}...")
-    driver = get_driver(headless=True)
+    driver = get_driver(headless=False)
 
     try:
-        # Acessa o site de busca conforme o search_engine
         if search_engine.lower() == "duckduckgo":
             driver.get("https://duckduckgo.com/")
-            time.sleep(15)  # Aguarda 15 segundos para o navegador abrir
+            time.sleep(15)
             accept_cookies(driver)
             WebDriverWait(driver, 10).until(
                 EC.presence_of_element_located((By.NAME, "q"))
@@ -106,9 +82,9 @@ def search_and_scrape(query: str, rede_social: str, max_pages: int = 5,
             )
         elif search_engine.lower() == "bing":
             driver.get("https://www.bing.com/")
-            time.sleep(15)  # Aguarda 15 segundos para o navegador abrir
+            time.sleep(15)
             accept_cookies(driver)
-            time.sleep(5)  # Intervalo adicional para o Bing
+            time.sleep(5)
             WebDriverWait(driver, 10).until(
                 EC.presence_of_element_located((By.NAME, "q"))
             )
@@ -118,9 +94,9 @@ def search_and_scrape(query: str, rede_social: str, max_pages: int = 5,
             WebDriverWait(driver, 10).until(
                 EC.presence_of_element_located((By.CSS_SELECTOR, "li.b_algo"))
             )
-        else:  # Google
+        else:
             driver.get("https://google.com/")
-            time.sleep(15)  # Aguarda 15 segundos para o navegador abrir
+            time.sleep(15)
             accept_cookies(driver)
             time.sleep(5)
             logging.info(f"Pesquisa iniciada para query: {query}")
@@ -129,7 +105,7 @@ def search_and_scrape(query: str, rede_social: str, max_pages: int = 5,
             search_box.send_keys(Keys.RETURN)
             WebDriverWait(driver, 10).until(
                 EC.presence_of_element_located(
-                    (By.CSS_SELECTOR, "div.VwiC3b.yXK7lf.p4wth.r025kc.hJNv6b.Hdw6tb")
+                    (By.CSS_SELECTOR, "div.VwiC3b.yXK7lf.p4wth.r025kc.hJNv6b, div.fzUZNc")
                 )
             )
 
@@ -157,11 +133,11 @@ def search_and_scrape(query: str, rede_social: str, max_pages: int = 5,
                     WebDriverWait(driver, 10).until(
                         EC.presence_of_all_elements_located(
                             (By.CSS_SELECTOR,
-                             "div.VwiC3b.yXK7lf.p4wth.r025kc.hJNv6b.Hdw6tb")
+                             "div.VwiC3b.yXK7lf.p4wth.r025kc.hJNv6b, div.fzUZNc")
                         )
                     )
                     containers = driver.find_elements(
-                        By.CSS_SELECTOR, "div.VwiC3b.yXK7lf.p4wth.r025kc.hJNv6b.Hdw6tb"
+                        By.CSS_SELECTOR, "div.VwiC3b.yXK7lf.p4wth.r025kc.hJNv6b, div.fzUZNc"
                     )
                     logging.info(
                         f"{len(containers)} resultados encontrados na página {current_page}.")
@@ -207,7 +183,6 @@ def search_and_scrape(query: str, rede_social: str, max_pages: int = 5,
                     logging.debug(f"E-mails encontrados: {emails}")
                     logging.debug(f"Telefones encontrados: {phones}")
 
-                    # Extração da URL e do username varia conforme o search engine
                     url = ""
                     if search_engine.lower() == "duckduckgo":
                         try:
@@ -271,12 +246,11 @@ def search_and_scrape(query: str, rede_social: str, max_pages: int = 5,
                             print(
                                 "Botão 'Próxima página' não encontrado. Fim da pesquisa.")
                             break
-                    # Rola a página para que o botão fique visível e clica nele
                     driver.execute_script(
                         "arguments[0].scrollIntoView();", next_page_button)
-                    time.sleep(1)
+                    time.sleep(3)
                     next_page_button.click()
-                    time.sleep(5)  # Intervalo de 5 segundos para o Bing
+                    time.sleep(5)
                     current_page += 1
                 else:
                     next_page_button = driver.find_element(
@@ -302,9 +276,6 @@ def search_and_scrape(query: str, rede_social: str, max_pages: int = 5,
 
 
 def extract_username(url: str, rede_social: str) -> str:
-    """
-    Extrai o username da URL com base no formato da rede social.
-    """
     from urllib.parse import urlparse
     parsed = urlparse(url)
     path = parsed.path.strip("/")
@@ -315,9 +286,6 @@ def extract_username(url: str, rede_social: str) -> str:
 
 
 def save_to_csv(results: list, filename: str = "resultados.csv") -> None:
-    """
-    Salva os resultados obtidos em um arquivo CSV.
-    """
     logging.info(f"Salvando {len(results)} resultados em {filename}...")
     with open(filename, mode="w", encoding="utf-8", newline="") as file:
         writer = csv.writer(file, delimiter=";")
@@ -330,7 +298,3 @@ def save_to_csv(results: list, filename: str = "resultados.csv") -> None:
                 result['snippet']
             ])
     logging.info(f"Arquivo {filename} salvo com sucesso.")
-
-
-if __name__ == "__main__":
-    print("Back-end iniciado. Aguardando chamadas do front-end.")
