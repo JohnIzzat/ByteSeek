@@ -6,12 +6,12 @@ niche_queries = {
     "pets": '"pets" OR "pet" OR "animais" OR "cachorro" OR "gato"',
     "roupas": '"roupas" OR "moda" OR "multimarcas" OR "adultos" OR "infantil"',
     "infantil": '"infantil" OR "criança" OR "kids"',
-    "autopeças": '"auto peça" OR "autopeça" OR "auto peças"',
+    "autopeças": '"auto peça" OR "autopeça" OR "auto peças" OR "#autopeças instagram"',
 }
 
 
 def show_snackbar(page, message):
-    """Exibe uma snackbar com a mensagem informada."""
+    # Exibe uma snackbar com a mensagem informada.
     snack_bar = ft.SnackBar(content=ft.Text(message))
     page.overlay.append(snack_bar)
     snack_bar.open = True
@@ -20,7 +20,7 @@ def show_snackbar(page, message):
 
 def main(page: ft.Page):
     # Configurações da Janela
-    page.title = "SeekBot"
+    page.title = "ByteSeek"
     page.theme_mode = "dark"
     page.horizontal_alignment = "center"
     page.vertical_alignment = "Center"

@@ -64,7 +64,7 @@ def executar_busca(rede_social: str, nicho: str, email: str, telefone: str, tele
 def search_and_scrape(query: str, rede_social: str, max_pages: int = 5,
                       search_engine: str = "google") -> list:
     logging.info(f"Iniciando scraping no {search_engine}...")
-    driver = get_driver(headless=False)
+    driver = get_driver(headless=True)
 
     try:
         if search_engine.lower() == "duckduckgo":
@@ -82,9 +82,9 @@ def search_and_scrape(query: str, rede_social: str, max_pages: int = 5,
             )
         elif search_engine.lower() == "bing":
             driver.get("https://www.bing.com/")
-            time.sleep(15)
+            time.sleep(10)
             accept_cookies(driver)
-            time.sleep(5)
+            time.sleep(10)
             WebDriverWait(driver, 10).until(
                 EC.presence_of_element_located((By.NAME, "q"))
             )
@@ -153,9 +153,10 @@ def search_and_scrape(query: str, rede_social: str, max_pages: int = 5,
                     if search_engine.lower() == "bing":
                         snippet = ""
                         selectors = [
-                            "div.b_caption p.b_lineclamp4",
+                            "div.b_caption p.b_lineclamp1",
                             "div.b_caption p.b_lineclamp2",
-                            "div.b_caption p.b_lineclamp3"
+                            "div.b_caption p.b_lineclamp3",
+                            "div.b_caption p.b_lineclamp4"
                         ]
                         for sel in selectors:
                             try:
